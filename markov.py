@@ -7,6 +7,6 @@ def build_markov_chains(quotes):
     for quote in quotes:
         split_quote = quote.split()
         for index in range(len(split_quote) - 1):
-            word_chains[split_quote[index]].append(word_chains[index+1])
+            word_chains[split_quote[index]].append(split_quote[index+1])
         
     return word_chains
