@@ -15,19 +15,25 @@ user_word = st.text_input(
     label="Enter a starter word from the options above",
     placeholder="Leave blank for random"
 )
-favor_letter = st.text_input(
-    label="Enter a letter to bias towards or leave blank"
-)
+
 use_frequency_weighting = st.sidebar.checkbox("Use Frequency Weighting")
+
+show_probabilities = st.sidebar.checkbox("Display Step-by-step Probability")
+
+enable_bias = st.sidebar.checkbox("Enable Bias")
+
+if enable_bias:
+    favor_letter = st.text_input(
+        label="Enter a letter to bias towards or leave blank"
+    )
 
 quote_length = st.number_input(
     label="Num. Words to Generate", 
-    max_value=20, 
-    min_value=5, 
-    value=5
+    max_value=25, 
+    min_value=8, 
+    value=8,
     )
 
-show_probabilities = st.sidebar.checkbox("Display Step-by-step Probability")
 
 if st.button("Generate Quote"):
     result = generate_text(
