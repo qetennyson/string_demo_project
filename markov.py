@@ -23,7 +23,7 @@ def build_markov_chains(quotes=QUOTES):
     return word_chains
 
 
-def generate_text(word_chains, start_word=None, length=10):
+def generate_text(word_chains, start_word=None, length=10, favor_letter=None, user_frequency_weighting=False, verbose=True):
 
     def get_backup_word(word_chains):
         start_words_to_choose_from = list(itertools.chain.from_iterable(list(word_chains.values())))
@@ -36,15 +36,65 @@ def generate_text(word_chains, start_word=None, length=10):
         start_word = get_backup_word(word_chains) 
 
     new_text = [start_word]
+
+    steps = []
+
     while len(new_text) < length:
         if start_word.lower() not in word_chains:
             break
 
-        next_word = random.choice(word_chains.get(start_word.lower()))
+        # Letter Favoring Algorithm
+        candidates = word_chains[start_word.lower()]
+
+        if favor_letter:
+            filtered = [word for word in candidates if word.lower().startswith(favor_letter.lower())]
+
+            if filtered:
+                candidates = filtered
+        
+
+        if verbose:
+            probabilities = get_next_word_probabilities(candidates)
+            steps.append({
+                'selected_word': start_word,
+                'next_options': probabilities,
+            })
+        
+        if user_frequency_weighting:
+            unique_words = list(set(candidates))
+            weights = [candidates.count(word) for word in unique_words]
+            next_word = random.choices(unique_words, weights=weights, k=1)[0]
+        else:
+            next_word = random.choice(candidates)
+        
         new_text.append(next_word)
         start_word = next_word
 
-    return ' '.join(new_text)
-    
+    final_text = ' '.join(new_text)
+
+    if verbose:
+        return {
+            'text' : final_text,
+            'steps': steps,
+        }
+    else:
+        return final_text
+
+def get_next_word_probabilities(candidates):
+    """
+    Returns a dictionary of {word : percentage} that reflects the 
+    likelihood of a word being suggested for the next word.
+    """
+    word_counts = {}
+    for word in candidates:
+        word_counts[word] = word_counts.get(word, 0) + 1
+
+    total = len(candidates)
+    probabilities = {}
+    for word, count in word_counts.items():
+        probabilities[word] = (count / total) * 100
+
+    return probabilities # {word: percent, word: percent}
+
 
     
