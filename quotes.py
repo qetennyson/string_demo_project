@@ -199,4 +199,5 @@ QUOTES = [
     "All progress takes place outside the comfort zone.",
     "Keep your eyes on the stars, and your feet on the ground.",
     "The best preparation for tomorrow is doing your best today.",
+    "Get in the zone, AutoZone!",
 ]

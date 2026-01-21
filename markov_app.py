@@ -9,6 +9,9 @@ if "random_starter_words" not in st.session_state:
 if "word_chains" not in st.session_state:
     st.session_state.word_chains = build_markov_chains()
 
+if "favor_letter" not in st.session_state:
+    st.session_state.favor_letter = None
+
 st.write(st.session_state.random_starter_words)
 
 user_word = st.text_input(
@@ -23,7 +26,7 @@ show_probabilities = st.sidebar.checkbox("Display Step-by-step Probability")
 enable_bias = st.sidebar.checkbox("Enable Bias")
 
 if enable_bias:
-    favor_letter = st.text_input(
+    st.session_state.favor_letter = st.text_input(
         label="Enter a letter to bias towards or leave blank"
     )
 
@@ -40,7 +43,7 @@ if st.button("Generate Quote"):
         st.session_state.word_chains, 
         start_word=user_word, 
         length=quote_length,
-        favor_letter=favor_letter if favor_letter != "" else None,
+        favor_letter=st.session_state.favor_letter,
         user_frequency_weighting=use_frequency_weighting,
         verbose=show_probabilities
 
