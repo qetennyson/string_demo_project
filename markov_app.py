@@ -1,7 +1,7 @@
 import streamlit as st
 from markov import generate_text, build_markov_chains, get_random_starter_words, get_next_word_probabilities
 
-st.title("Markov Chains with Strings aka Inspirational Quote Generator")
+st.title("'INSPIRATIONAL' Quote Generator")
 
 if "random_starter_words" not in st.session_state:
     st.session_state.random_starter_words = get_random_starter_words()
