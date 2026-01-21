@@ -47,10 +47,15 @@ def generate_text(word_chains, start_word=None, length=10, favor_letter=None, us
         candidates = word_chains[start_word.lower()]
 
         if favor_letter:
-            filtered = [word for word in candidates if word.lower().startswith(favor_letter.lower())]
+            weighted_candidates = []
+            for word in candidates:
+                if word.lower().startswith(favor_letter.lower()):
+                    weighted_candidates.extend([word] * 10)
+                else:
+                    weighted_candidates.append(word)
 
-            if filtered:
-                candidates = filtered
+        
+            candidates = weighted_candidates
         
 
         if verbose:
